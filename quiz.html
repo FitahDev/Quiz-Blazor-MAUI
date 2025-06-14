@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz .NET Blazor & MAUI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .container {
+            max-width: 64rem;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .icon {
+            width: 4rem;
+            height: 4rem;
+            margin: 0 auto 1rem;
+            fill: currentColor;
+        }
+
+        .icon-large {
+            width: 5rem;
+            height: 5rem;
+        }
+
+        .icon-small {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        .icon-yellow {
+            color: #f59e0b;
+        }
+
+        .icon-green {
+            color: #10b981;
+        }
+
+        .icon-red {
+            color: #ef4444;
+        }
+
+        .icon-gray {
+            color: #6b7280;
+        }
+
+        .title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.125rem;
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .details-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .detail-card {
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+
+        .detail-card.blue {
+            background-color: #dbeafe;
+        }
+
+        .detail-card.green {
+            background-color: #d1fae5;
+        }
+
+        .detail-card.purple {
+            background-color: #e9d5ff;
+        }
+
+        .detail-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-title.blue {
+            color: #1e40af;
+        }
+
+        .detail-title.green {
+            color: #047857;
+        }
+
+        .detail-title.purple {
+            color: #7c3aed;
+        }
+
+        .detail-text {
+            font-size: 0.875rem;
+        }
+
+        .detail-text.blue {
+            color: #2563eb;
+        }
+
+        .detail-text.green {
+            color: #059669;
+        }
+
+        .detail-text.purple {
+            color: #8b5cf6;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+            color: white;
+            font-weight: 700;
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1.125rem;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #4338ca 100%);
+            transform: scale(1.05);
+        }
+
+        .btn:disabled {
+            background: #d1d5db;
+            color: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-green {
+            background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
+        }
+
+        .btn-green:hover {
+            background: linear-gradient(135deg, #047857 0%, #0f766e 100%);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+        }
+
+        .badge-blue {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-purple {
+            background-color: #e9d5ff;
+            color: #7c3aed;
+        }
+
+        .badge-green {
+            background-color: #d1fae5;
+            color: #047857;
+        }
+
+        .timer {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timer-text {
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .timer-text.danger {
+            color: #dc2626;
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            height: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+            height: 0.5rem;
+            border-radius: 9999px;
+            transition: width 0.3s;
+        }
+
+        .question {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .option {
+            width: 100%;
+            text-align: left;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 2px solid #e5e7eb;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option:hover {
+            border-color: #d1d5db;
+            background-color: #f9fafb;
+        }
+
+        .option.selected {
+            border-color: #2563eb;
+            background-color: #eff6ff;
+            color: #1e3a8a;
+        }
+
+        .option-letter {
+            font-weight: 500;
+            margin-right: 0.75rem;
+            color: #6b7280;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .results {
+            text-align: center;
+        }
+
+        .level-badge {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+
+        .level-expert {
+            background-color: #f3e8ff;
+            color: #7c3aed;
+        }
+
+        .level-senior {
+            background-color: #dbeafe;
+            color: #2563eb;
+        }
+
+        .level-intermediate-plus {
+            background-color: #d1fae5;
+            color: #059669;
+        }
+
+        .level-intermediate {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
+
+        .level-junior {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+
+        .score {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 1.5rem;
+        }
+
+        .analysis {
+            background-color: #f9fafb;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .analysis-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stat-card {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .stat-card.correct {
+            background-color: #d1fae5;
+        }
+
+        .stat-card.incorrect {
+            background-color: #fee2e2;
+        }
+
+        .stat-text {
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .stat-text.correct {
+            color: #047857;
+        }
+
+        .stat-text.incorrect {
+            color: #dc2626;
+        }
+
+        .review {
+            margin-bottom: 1.5rem;
+        }
+
+        .review-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .review-container {
+            max-height: 24rem;
+            overflow-y: auto;
+        }
+
+        .review-item {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid;
+        }
+
+        .review-item.correct {
+            border-left-color: #10b981;
+            background-color: #ecfdf5;
+        }
+
+        .review-item.incorrect {
+            border-left-color: #ef4444;
+            background-color: #fef2f2;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .review-question {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .review-text {
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .review-user-answer {
+            color: #6b7280;
+        }
+
+        .review-correct-answer {
+            color: #047857;
+        }
+
+        .review-explanation {
+            color: #2563eb;
+            margin-top: 0.5rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .mr-2 {
+            margin-right: 0.5rem;
+        }
+
+        .ml-2 {
+            margin-left: 0.5rem;
+        }
+
+        .bg-gray-50 {
+            background-color: #f9fafb;
+        }
+
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+
+        .p-6 {
+            padding: 1.5rem;
+        }
+
+        .mb-6 {
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Écran de démarrage -->
+        <div id="startScreen" class="card text-center">
+            <div>
+                <svg class="icon icon-large icon-yellow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                    <path d="M14 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                    <path d="M18 9h-4"></path>
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                <h1 class="title">Quiz .NET Blazor & MAUI</h1>
+                <p class="subtitle">Test tes compétences de développeur</p>
+            </div>
+            
+            <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                <h2 class="text-xl font-semibold mb-4">Détails du Quiz</h2>
+                <div class="details-grid">
+                    <div class="detail-card blue">
+                        <span class="detail-title blue">50 Questions</span>
+                        <p class="detail-text blue">Niveaux Intermédiaire & Senior</p>
+                    </div>
+                    <div class="detail-card green">
+                        <span class="detail-title green">45s par question</span>
+                        <p class="detail-text green">Temps limité</p>
+                    </div>
+                    <div class="detail-card purple">
+                        <span class="detail-title purple">Score & Niveau</span>
+                        <p class="detail-text purple">Évaluation détaillée</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button onclick="startQuiz()" class="btn">
+                Commencer le Quiz 🚀
+            </button>
+        </div>
+
+        <!-- Écran de quiz -->
+        <div id="quizScreen" class="card hidden">
+            <div class="header">
+                <div class="header-left">
+                    <span id="questionCounter" class="badge badge-blue">Question 1/50</span>
+                    <span id="levelBadge" class="badge badge-green">Intermédiaire</span>
+                </div>
+                <div class="timer">
+                    <svg class="icon-small icon-gray" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12,6 12,12 16,14"></polyline>
+                    </svg>
+                    <span id="timer" class="timer-text">45s</span>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill" style="width: 2%"></div>
+            </div>
+
+            <div>
+                <h2 id="questionText" class="question"></h2>
+                
+                <div id="optionsContainer" class="options">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="btn-container">
+                <button id="nextBtn" onclick="handleNextQuestion()" class="btn" disabled>
+                    <span id="nextBtnText">Suivant</span>
+                    <svg class="icon-small ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9,18 15,12 9,6"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Écran de résultats -->
+        <div id="resultsScreen" class="card hidden">
+            <div class="results">
+                <svg class="icon icon-large icon-yellow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                    <path d="M14 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                    <path d="M18 9h-4"></path>
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                <h1 class="title">Quiz Terminé !</h1>
+                <div id="levelResult" class="level-badge">Niveau: Expert</div>
+                <p id="scoreResult" class="score">Score: 45/50 (90%)</p>
+            </div>
+
+            <div class="analysis">
+                <h3 class="analysis-title">Analyse détaillée</h3>
+                <div class="stats-grid">
+                    <div class="stat-card correct">
+                        <svg class="icon-small icon-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="m9 12 2 2 4-4"></path>
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                        <span id="correctAnswers" class="stat-text correct">Bonnes réponses: 45</span>
+                    </div>
+                    <div class="stat-card incorrect">
+                        <svg class="icon-small icon-red" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="m15 9-6 6"></path>
+                            <path d="m9 9 6 6"></path>
+                        </svg>
+                        <span id="incorrectAnswers" class="stat-text incorrect">Erreurs: 5</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review">
+                <h3 class="review-title">Révision des questions</h3>
+                <div id="reviewContainer" class="review-container">
+                    <!-- Review items will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button onclick="resetQuiz()" class="btn btn-green">
+                    <svg class="icon-small mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
+                        <path d="M21 3v5h-5"></path>
+                        <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
+                        <path d="M3 21v-5h5"></path>
+                    </svg>
+                    Recommencer le Quiz
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State variables
+        let currentQuestion = 0;
+        let selectedAnswer = -1;
+        let score = 0;
+        let answers = [];
+        let timeLeft = 45;
+        let quizStarted = false;
+        let quizCompleted = false;
+        let timer = null;
+
+        // Questions data
+        const questions = [
+            {
+                id: 1,
+                level: "Intermédiaire",
+                question: "Dans Blazor Server, quel est le rôle principal de SignalR ?",
+                options: [
+                    "Gérer l'authentification des utilisateurs",
+                    "Maintenir la connexion temps réel entre client et serveur",
+                    "Optimiser les performances de rendu",
+                    "Gérer le routage des pages"
+                ],
+                correct: 1,
+                explanation: "SignalR maintient une connexion WebSocket persistante entre le client et le serveur pour synchroniser l'état de l'application."
+            },
+            {
+                id: 2,
+                level: "Senior",
+                question: "Quelle est la différence principale entre @page et @layout dans Blazor ?",
+                options: [
+                    "@page définit une route, @layout définit la structure de page",
+                    "@page est pour les composants, @layout pour les pages",
+                    "Aucune différence, ce sont des synonymes",
+                    "@page est obligatoire, @layout est optionnel"
+                ],
+                correct: 0,
+                explanation: "@page définit qu'un composant est routable avec une URL spécifique, tandis que @layout définit la structure commune partagée par plusieurs pages."
+            },
+            {
+                id: 3,
+                level: "Intermédiaire",
+                question: "Dans MAUI, quel est le fichier principal de configuration multi-plateforme ?",
+                options: [
+                    "App.xaml",
+                    "MainPage.xaml", 
+                    "MauiProgram.cs",
+                    "Platforms/Android/AndroidManifest.xml"
+                ],
+                correct: 2,
+                explanation: "MauiProgram.cs est le point d'entrée principal où se configure l'application MAUI pour toutes les plateformes."
+            },
+            {
+                id: 4,
+                level: "Senior",
+                question: "Comment optimiser les performances d'un composant Blazor avec de nombreuses données ?",
+                options: [
+                    "Utiliser @key et ShouldRender()",
+                    "Augmenter la fréquence de StateHasChanged()",
+                    "Utiliser uniquement des composants statiques",
+                    "Éviter les paramètres de composant"
+                ],
+                correct: 0,
+                explanation: "@key aide Blazor à identifier les éléments à re-rendre, et ShouldRender() permet de contrôler quand un composant doit se mettre à jour."
+            },
+            {
+                id: 5,
+                level: "Intermédiaire",
+                question: "Quelle directive Blazor permet de lier bidirectionnellement une propriété ?",
+                options: [
+                    "@bind",
+                    "@ref",
+                    "@onclick", 
+                    "@inject"
+                ],
+                correct: 0,
+                explanation: "@bind crée une liaison bidirectionnelle entre une propriété du composant et un élément d'interface utilisateur."
+            },
+            {
+                id: 6,
+                level: "Senior",
+                question: "Dans MAUI, comment implémenter efficacement la navigation entre plateformes ?",
+                options: [
+                    "Utiliser NavigationPage uniquement",
+                    "Shell avec routes définies",
+                    "Créer des NavigationService personnalisés pour chaque plateforme",
+                    "Utiliser uniquement les contrôles natifs"
+                ],
+                correct: 1,
+                explanation: "Shell offre une approche unifiée de navigation avec un système de routes qui fonctionne sur toutes les plateformes MAUI."
+            },
+            {
+                id: 7,
+                level: "Intermédiaire",
+                question: "Quel est l'avantage principal de Blazor WebAssembly par rapport à Blazor Server ?",
+                options: [
+                    "Meilleure sécurité",
+                    "Fonctionnement offline possible",
+                    "Performance supérieure",
+                    "Plus simple à déployer"
+                ],
+                correct: 1,
+                explanation: "Blazor WebAssembly s'exécute côté client, permettant à l'application de fonctionner même sans connexion serveur."
+            },
+            {
+                id: 8,
+                level: "Senior",
+                question: "Comment gérer l'état global dans une application Blazor complexe ?",
+                options: [
+                    "Variables statiques uniquement",
+                    "Services Singleton avec événements",
+                    "SessionStorage pour tout",
+                    "Paramètres de composant uniquement"
+                ],
+                correct: 1,
+                explanation: "Les services Singleton avec des événements pour notifier les changements d'état offrent une gestion d'état centralisée et réactive."
+            },
+            {
+                id: 9,
+                level: "Intermédiaire",
+                question: "Dans MAUI, quel contrôle utiliser pour une liste avec virtualisation ?",
+                options: [
+                    "ListView",
+                    "CollectionView",
+                    "StackLayout",
+                    "FlexLayout"
+                ],
+                correct: 1,
+                explanation: "CollectionView offre une meilleure performance avec la virtualisation automatique pour les grandes listes de données."
+            },
+            {
+                id: 10,
+                level: "Senior",
+                question: "Comment implémenter l'injection de dépendance dans un composant Blazor ?",
+                options: [
+                    "Constructeur uniquement",
+                    "@inject ou [Inject] property",
+                    "Static factory pattern",
+                    "Manual instantiation"
+                ],
+                correct: 1,
+                explanation: "Blazor utilise @inject dans le markup ou l'attribut [Inject] sur les propriétés pour l'injection de dépendances."
+            },
+            {
+                id: 11,
+                level: "Intermédiaire",
+                question: "Quelle est la méthode recommandée pour gérer les exceptions dans Blazor ?",
+                options: [
+                    "try-catch dans chaque méthode",
+                    "ErrorBoundary component",
+                    "Global exception handler uniquement",
+                    "Ignorer les exceptions côté client"
+                ],
+                correct: 1,
+                explanation: "ErrorBoundary permet de capturer et gérer les exceptions non gérées dans l'arbre des composants Blazor."
+            },
+            {
+                id: 12,
+                level: "Senior",
+                question: "Dans MAUI, comment optimiser les performances sur Android ?",
+                options: [
+                    "Utiliser uniquement des layouts natifs",
+                    "Fast Renderers et AOT compilation",
+                    "Éviter les databindings",
+                    "Réduire le nombre de pages"
+                ],
+                correct: 1,
+                explanation: "Fast Renderers réduisent la hiérarchie des vues natives et AOT améliore les performances de démarrage."
+            },
+            {
+                id: 13,
+                level: "Intermédiaire",
+                question: "Comment passer des données entre composants parent et enfant en Blazor ?",
+                options: [
+                    "Variables globales uniquement",
+                    "Parameters et EventCallback",
+                    "Session storage",
+                    "Static properties"
+                ],
+                correct: 1,
+                explanation: "Parameters permettent de passer des données du parent vers l'enfant, EventCallback permet la communication inverse."
+            },
+            {
+                id: 14,
+                level: "Senior",
+                question: "Quelle stratégie adopter pour le testing unitaire des composants Blazor ?",
+                options: [
+                    "Selenium uniquement",
+                    "bUnit avec TestContext",
+                    "Manual testing seulement",
+                    "Integration tests uniquement"
+                ],
+                correct: 1,
+                explanation: "bUnit est la bibliothèque recommandée pour tester les composants Blazor avec TestContext pour simuler le rendu."
+            },
+            {
+                id: 15,
+                level: "Intermédiaire",
+                question: "Dans MAUI, comment gérer différentes résolutions d'écran ?",
+                options: [
+                    "Images fixes uniquement",
+                    "Resources avec suffixes de densité",
+                    "CSS media queries",
+                    "JavaScript responsive"
+                ],
+                correct: 1,
+                explanation: "MAUI utilise des suffixes comme @2x, @3x pour les différentes densités d'écran et résolutions."
+            },
+            {
+                id: 16,
+                level: "Senior",
+                question: "Comment implémenter la lazy loading dans Blazor ?",
+                options: [
+                    "Impossible en Blazor",
+                    "@lazy directive",
+                    "Lazy<T> et assemblies satellites",
+                    "Dynamic imports uniquement"
+                ],
+                correct: 2,
+                explanation: "Blazor supporte le lazy loading via Lazy<T> pour les services et les assemblies satellites pour les composants." 
+            },{
+                id: 17,
+                level: "Intermédiaire",
+                question: "Quelle est la différence entre @code et @functions dans Blazor ?",
+                options: [
+                    "Aucune différence fonctionnelle",
+                    "@code est pour C#, @functions pour JavaScript",
+                    "@code est obsolète, @functions est recommandé",
+                    "@functions permet plus de fonctionnalités"
+                ],
+                correct: 0,
+                explanation: "@code et @functions sont des synonymes, les deux directives permettent de définir du code C# dans un composant Blazor."
+            },
+            {
+                id: 18,
+                level: "Senior",
+                question: "Comment implémenter l'authentification dans une application Blazor WebAssembly ?",
+                options: [
+                    "Uniquement via des cookies",
+                    "API Authentication avec JWT ou OIDC",
+                    "Seulement en backend",
+                    "Non sécurisable en WebAssembly"
+                ],
+                correct: 1,
+                explanation: "Blazor WebAssembly supporte l'authentification via JWT tokens ou OIDC (OpenID Connect) pour sécuriser les applications."
+            },
+            {
+                id: 19,
+                level: "Intermédiaire",
+                question: "Dans MAUI, comment accéder aux fonctionnalités natives comme l'appareil photo ?",
+                options: [
+                    "API Windows uniquement",
+                    "Essentials API ou interfaces spécifiques",
+                    "JavaScript bridge",
+                    "Via Xamarin uniquement"
+                ],
+                correct: 1,
+                explanation: "MAUI Essentials fournit des API cross-platform pour accéder aux fonctionnalités natives sur différents appareils."
+            },
+            {
+                id: 20,
+                level: "Senior",
+                question: "Quelle technique utiliser pour optimiser le rendu des composants Blazor ?",
+                options: [
+                    "RenderFragment partout",
+                    "SupressAttributes et CascadingValue",
+                    "Virtualization et Fragment optimization",
+                    "Utiliser plus de JavaScript"
+                ],
+                correct: 2,
+                explanation: "La virtualisation permet de ne rendre que les éléments visibles, et l'optimisation des fragments réduit le coût de rendu."
+            },
+            {
+                id: 21,
+                level: "Intermédiaire",
+                question: "Quelle méthode du cycle de vie Blazor s'exécute après chaque rendu ?",
+                options: [
+                    "OnInitialized",
+                    "OnParametersSet",
+                    "OnAfterRender",
+                    "OnDisposed"
+                ],
+                correct: 2,
+                explanation: "OnAfterRender et OnAfterRenderAsync sont appelés après que le composant a été rendu dans le DOM."
+            },
+            {
+                id: 22,
+                level: "Senior",
+                question: "Comment implémenter un système de thèmes dynamiques dans MAUI ?",
+                options: [
+                    "CSS uniquement",
+                    "ResourceDictionaries et DynamicResource",
+                    "JavaScriptInterop",
+                    "Utiliser uniquement des styles natifs"
+                ],
+                correct: 1,
+                explanation: "ResourceDictionaries permet de définir des ressources réutilisables et DynamicResource permet de les changer dynamiquement."
+            },
+            {
+                id: 23,
+                level: "Intermédiaire",
+                question: "Quelle est la méthode recommandée pour gérer les formulaires dans Blazor ?",
+                options: [
+                    "OnSubmit uniquement",
+                    "EditForm avec DataAnnotations",
+                    "JavaScript validation",
+                    "HTTP POST manuel"
+                ],
+                correct: 1,
+                explanation: "EditForm avec DataAnnotations offre une validation de formulaire intégrée côté client et serveur."
+            },
+            {
+                id: 24,
+                level: "Senior",
+                question: "Comment optimiser la taille d'une application Blazor WebAssembly ?",
+                options: [
+                    "Impossible, taille fixe",
+                    "Trimming, compression et lazy loading",
+                    "Réduire le nombre de composants",
+                    "Utiliser plus de JavaScript"
+                ],
+                correct: 1,
+                explanation: "Le trimming élimine le code inutilisé, la compression réduit la taille des fichiers, et le lazy loading charge les assemblies à la demande."
+            },
+            {
+                id: 25,
+                level: "Intermédiaire",
+                question: "Dans MAUI, quelle est la différence entre Grid et FlexLayout ?",
+                options: [
+                    "Grid est unidimensionnel, FlexLayout bidimensionnel",
+                    "FlexLayout est flexible, Grid est fixe",
+                    "Grid est bidimensionnel, FlexLayout est principalement unidimensionnel",
+                    "Aucune différence fonctionnelle"
+                ],
+                correct: 2,
+                explanation: "Grid organise les éléments en lignes et colonnes (bidimensionnel), tandis que FlexLayout est principalement conçu pour des arrangements linéaires flexibles."
+            },
+            {
+                id: 26,
+                level: "Senior",
+                question: "Comment implémenter un système de localisation efficace dans Blazor ?",
+                options: [
+                    "Fichiers de ressources statiques uniquement",
+                    "String literals en dur",
+                    "IStringLocalizer et culture switching",
+                    "JavaScript i18n libraries"
+                ],
+                correct: 2,
+                explanation: "IStringLocalizer avec la possibilité de changer la culture permet une localisation flexible et dynamique."
+            },
+            {
+                id: 27,
+                level: "Intermédiaire",
+                question: "Quelle est la meilleure pratique pour communiquer entre composants Blazor non liés ?",
+                options: [
+                    "Variables globales",
+                    "Services d'événements",
+                    "LocalStorage",
+                    "Recréer la hiérarchie"
+                ],
+                correct: 1,
+                explanation: "Les services d'événements (event bus pattern) permettent la communication entre composants sans relation directe."
+            },
+            {
+                id: 28,
+                level: "Senior",
+                question: "Dans MAUI, comment gérer efficacement les ressources par plateforme ?",
+                options: [
+                    "Uniquement des ressources partagées",
+                    "OnPlatform<T> et dossiers spécifiques",
+                    "Compilation conditionnelle uniquement",
+                    "Ressources uniquement en code"
+                ],
+                correct: 1,
+                explanation: "OnPlatform<T> dans XAML et les dossiers spécifiques à la plateforme permettent d'adapter les ressources par système."
+            },
+            {
+                id: 29,
+                level: "Intermédiaire",
+                question: "Comment référencer un élément DOM dans Blazor ?",
+                options: [
+                    "getElementById uniquement",
+                    "@ref directive",
+                    "querySelector en JS",
+                    "Non supporté en Blazor"
+                ],
+                correct: 1,
+                explanation: "La directive @ref permet de créer une référence à un élément DOM ou à un composant Blazor."
+            },
+            {
+                id: 30,
+                level: "Senior",
+                question: "Quelle approche est recommandée pour la gestion d'état dans une application MAUI ?",
+                options: [
+                    "Singleton uniquement",
+                    "Application.Current.Properties",
+                    "MVVM avec INotifyPropertyChanged",
+                    "Static properties partout"
+                ],
+                correct: 2,
+                explanation: "MVVM avec INotifyPropertyChanged offre une séparation des préoccupations et une liaison de données réactive."
+            },
+            {
+                id: 31,
+                level: "Intermédiaire",
+                question: "Dans Blazor, comment appeler une méthode JavaScript depuis C# ?",
+                options: [
+                    "Non supporté",
+                    "IJSRuntime.InvokeAsync",
+                    "window.external",
+                    "@js directive"
+                ],
+                correct: 1,
+                explanation: "IJSRuntime.InvokeAsync permet d'appeler des fonctions JavaScript depuis le code C# en Blazor."
+            },
+            {
+                id: 32,
+                level: "Senior",
+                question: "Comment implémenter un canal de communication bidirectionnel entre C# et JavaScript en Blazor ?",
+                options: [
+                    "Impossible en Blazor",
+                    "JSInvokable et DotNetObjectReference",
+                    "Uniquement via HTTP",
+                    "WebSockets manuels"
+                ],
+                correct: 1,
+                explanation: "[JSInvokable] permet d'exposer des méthodes C# à JavaScript et DotNetObjectReference permet de maintenir des références vers des objets .NET."
+            },
+            {
+                id: 33,
+                level: "Intermédiaire",
+                question: "Dans MAUI, comment implémenter une animation fluide ?",
+                options: [
+                    "Uniquement avec CSS",
+                    "ViewExtensions et Animation API",
+                    "JavaScript uniquement",
+                    "Non supporté nativement"
+                ],
+                correct: 1,
+                explanation: "MAUI fournit ViewExtensions pour des animations simples et une Animation API pour des animations plus complexes."
+            },
+            {
+                id: 34,
+                level: "Senior",
+                question: "Quelle est la meilleure stratégie pour la gestion des erreurs dans une application MAUI en production ?",
+                options: [
+                    "Ignorer les erreurs",
+                    "AppDomain.UnhandledException et logging distant",
+                    "MessageBox uniquement",
+                    "Redémarrer l'application"
+                ],
+                correct: 1,
+                explanation: "Capturer les exceptions non gérées et les envoyer à un service de logging distant permet le diagnostic en production."
+            },
+            {
+                id: 35,
+                level: "Intermédiaire",
+                question: "Comment créer un composant Blazor réutilisable avec des paramètres ?",
+                options: [
+                    "Static class uniquement",
+                    "[Parameter] attribute",
+                    "Interface uniquement",
+                    "Pas de paramètres possibles"
+                ],
+                correct: 1,
+                explanation: "L'attribut [Parameter] permet de définir des propriétés qui peuvent être passées au composant lors de son utilisation."
+            },
+            {
+                id: 36,
+                level: "Senior",
+                question: "Comment optimiser les performances de démarrage d'une application MAUI ?",
+                options: [
+                    "Augmenter la RAM requise",
+                    "AOT Compilation et App Trimming",
+                    "Splash screen uniquement",
+                    "Lazy loading total"
+                ],
+                correct: 1,
+                explanation: "AOT (Ahead-of-Time) compilation et App Trimming réduisent la taille et améliorent le temps de démarrage."
+            },
+            {
+                id: 37,
+                level: "Intermédiaire",
+                question: "Dans Blazor, comment empêcher le rendu d'un composant ?",
+                options: [
+                    "@if(false)",
+                    "display: none en CSS",
+                    "Impossible en Blazor",
+                    "RemoveComponent() method"
+                ],
+                correct: 0,
+                explanation: "Utiliser des directives conditionnelles comme @if(false) empêche le composant d'être rendu dans le DOM."
+            },
+            {
+                id: 38,
+                level: "Senior",
+                question: "Quelle technique utiliser pour implémenter la synchronisation hors ligne dans une application MAUI ?",
+                options: [
+                    "Non supporté nativement",
+                    "SQLite avec stratégie de synchronisation",
+                    "Uniquement mémoire",
+                    "Pas besoin, toujours en ligne"
+                ],
+                correct: 1,
+                explanation: "SQLite pour le stockage local avec une stratégie de synchronisation personnalisée permet de gérer les scénarios hors ligne."
+            },
+            {
+                id: 39,
+                level: "Intermédiaire",
+                question: "Dans Blazor, comment gérer la navigation programmative ?",
+                options: [
+                    "window.location uniquement",
+                    "NavigationManager.NavigateTo",
+                    "@href uniquement",
+                    "Redirection HTTP"
+                ],
+                correct: 1,
+                explanation: "NavigationManager.NavigateTo permet de naviguer programmatiquement vers une autre page en Blazor."
+            },
+            {
+                id: 40,
+                level: "Senior",
+                question: "Comment implémenter correctement la virtualisation dans une liste Blazor avec beaucoup d'items ?",
+                options: [
+                    "Pagination uniquement",
+                    "Virtualize component avec ItemsProvider",
+                    "Limiter le nombre d'items",
+                    "JavaScript scrolling"
+                ],
+                correct: 1,
+                explanation: "Le composant Virtualize avec ItemsProvider permet de charger et rendre efficacement de grandes quantités de données."
+            },
+            {
+                id: 41,
+                level: "Intermédiaire",
+                question: "Dans MAUI, comment personnaliser l'apparence par plateforme ?",
+                options: [
+                    "Impossible, apparence unifiée uniquement",
+                    "OnPlatform et CSS",
+                    "DeviceType et ressources conditionnelles",
+                    "JavaScript uniquement"
+                ],
+                correct: 2,
+                explanation: "DeviceIdiom/DeviceType avec des ressources conditionnelles permet d'adapter l'interface aux différentes plateformes."
+            },
+            {
+                id: 42,
+                level: "Senior",
+                question: "Quelle est la meilleure approche pour l'architecture d'une grande application Blazor ?",
+                options: [
+                    "Monolithique uniquement",
+                    "Clean Architecture avec CQRS",
+                    "Pas de structure particulière",
+                    "Uniquement MVC classique"
+                ],
+                correct: 1,
+                explanation: "Clean Architecture avec CQRS permet une séparation des préoccupations et une meilleure testabilité dans les grandes applications."
+            },
+            {
+                id: 43,
+                level: "Intermédiaire",
+                question: "Comment implémenter la validation côté client dans Blazor ?",
+                options: [
+                    "JavaScript uniquement",
+                    "DataAnnotations avec ValidationMessage",
+                    "HTTP uniquement",
+                    "Non supporté"
+                ],
+                correct: 1,
+                explanation: "Les DataAnnotations couplées avec ValidationMessage permettent une validation déclarative côté client."
+            },
+            {
+                id: 44,
+                level: "Senior",
+                question: "Dans MAUI, quelle est la meilleure pratique pour la gestion des dépendances tierces spécifiques à une plateforme ?",
+                options: [
+                    "Éviter les dépendances tierces",
+                    "DependencyService ou Handler pattern",
+                    "Uniquement des bibliothèques multi-plateformes",
+                    "Compilations séparées"
+                ],
+                correct: 1,
+                explanation: "DependencyService ou le Handler pattern permettent d'abstraire les implémentations spécifiques à chaque plateforme."
+            },
+            {
+                id: 45,
+                level: "Intermédiaire",
+                question: "Comment créer un middleware personnalisé dans une application Blazor Server ?",
+                options: [
+                    "Non supporté en Blazor",
+                    "Implémenter IMiddleware",
+                    "JavaScript uniquement",
+                    "Uniquement via modules"
+                ],
+                correct: 1,
+                explanation: "Implémenter IMiddleware ou utiliser l'approche Use() dans Startup permet de créer des middlewares personnalisés."
+            },
+            {
+                id: 46,
+                level: "Senior",
+                question: "Quelle stratégie adopter pour le déploiement d'applications MAUI en entreprise ?",
+                options: [
+                    "Uniquement via stores publics",
+                    "CI/CD avec signing et distribution interne",
+                    "Installation manuelle uniquement",
+                    "Uniquement sur desktop"
+                ],
+                correct: 1,
+                explanation: "CI/CD automatisé avec signing et systèmes de distribution interne (MDM) permet un déploiement contrôlé en entreprise."
+            },
+            {
+                id: 47,
+                level: "Intermédiaire",
+                question: "Comment gérer l'état de la session utilisateur dans Blazor WebAssembly ?",
+                options: [
+                    "Cookies uniquement",
+                    "LocalStorage ou SessionStorage",
+                    "Variables globales",
+                    "Toujours demander au serveur"
+                ],
+                correct: 1,
+                explanation: "LocalStorage ou SessionStorage via ProtectedLocalStorage permet de stocker des données de session côté client."
+            },
+            {
+                id: 48,
+                level: "Senior",
+                question: "Comment implémenter des tests d'UI automatisés pour une application MAUI ?",
+                options: [
+                    "Non testable automatiquement",
+                    "Appium ou MAUI UI Tests",
+                    "Uniquement tests unitaires",
+                    "Tests manuels uniquement"
+                ],
+                correct: 1,
+                explanation: "Appium ou les frameworks spécifiques à MAUI permettent d'automatiser les tests d'interface utilisateur cross-platform."
+            },
+            {
+                id: 49,
+                level: "Intermédiaire",
+                question: "Comment utiliser un service HttpClient dans Blazor WebAssembly ?",
+                options: [
+                    "Non supporté côté client",
+                    "Injecter HttpClient avec AddHttpClient",
+                    "Utiliser XMLHttpRequest",
+                    "Toujours via SignalR"
+                ],
+                correct: 1,
+                explanation: "Injecter HttpClient configuré avec AddHttpClient dans Program.cs permet d'effectuer des requêtes HTTP."
+            },
+            {
+                id: 50,
+                level: "Senior",
+                question: "Quelle est la meilleure pratique pour gérer les mises à jour d'applications MAUI en production ?",
+                options: [
+                    "Uniquement via redéploiement complet",
+                    "Update services et versioning sémantique",
+                    "Notification manuelle uniquement",
+                    "Pas de mise à jour possible"
+                ],
+                correct: 1,
+                explanation: "Utiliser des services de mise à jour (comme AppCenter) avec un versioning sémantique permet des mises à jour contrôlées."
+            }
+        ];
+
+        // Game functions
+        function startQuiz() {
+            quizStarted = true;
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+            loadQuestion();
+            startTimer();
+        }
+
+        function loadQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('questionCounter').textContent = `Question ${currentQuestion + 1}/${questions.length}`;
+            document.getElementById('levelBadge').textContent = question.level;
+            document.getElementById('levelBadge').className = question.level === "Senior" ? "badge badge-purple" : "badge badge-green";
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('button');
+                optionElement.className = 'option';
+                optionElement.dataset.index = index;
+                optionElement.innerHTML = `<span class="option-letter">${String.fromCharCode(65 + index)}.</span> ${option}`;
+                optionElement.addEventListener('click', selectOption);
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Update progress bar
+            const progressPercentage = ((currentQuestion) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = `${progressPercentage}%`;
+            
+            // Reset state for new question
+            selectedAnswer = -1;
+            document.getElementById('nextBtn').disabled = true;
+            resetTimer();
+        }
+
+        function selectOption(event) {
+            const selectedIndex = parseInt(event.currentTarget.dataset.index);
+            selectedAnswer = selectedIndex;
+            
+            // Clear previous selections
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Mark as selected
+            event.currentTarget.classList.add('selected');
+            
+            // Enable next button
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function handleNextQuestion() {
+            // Record answer
+            answers.push({
+                questionId: questions[currentQuestion].id,
+                question: questions[currentQuestion].question,
+                selectedAnswer: selectedAnswer,
+                correctAnswer: questions[currentQuestion].correct,
+                isCorrect: selectedAnswer === questions[currentQuestion].correct,
+                explanation: questions[currentQuestion].explanation
+            });
+            
+            // Update score
+            if (selectedAnswer === questions[currentQuestion].correct) {
+                score++;
+            }
+            
+            clearInterval(timer);
+            
+            // Move to next question or end quiz
+            currentQuestion++;
+            
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+                startTimer();
+                document.getElementById('nextBtnText').textContent = "Suivant";
+            } else {
+                endQuiz();
+            }
+        }
+
+        function startTimer() {
+            timeLeft = 45;
+            document.getElementById('timer').textContent = `${timeLeft}s`;
+            document.getElementById('timer').classList.remove('danger');
+            
+            timer = setInterval(function() {
+                timeLeft--;
+                document.getElementById('timer').textContent = `${timeLeft}s`;
+                
+                if (timeLeft <= 10) {
+                    document.getElementById('timer').classList.add('danger');
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    // Auto-select if no answer
+                    if (selectedAnswer === -1) {
+                        selectedAnswer = -1; // No answer
+                    }
+                    handleNextQuestion();
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            timeLeft = 45;
+            document.getElementById('timer').textContent = `${timeLeft}s`;
+            document.getElementById('timer').classList.remove('danger');
+        }
+
+        function endQuiz() {
+            quizCompleted = true;
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('resultsScreen').classList.remove('hidden');
+            
+            // Calculate score percentage
+            const scorePercentage = (score / questions.length) * 100;
+            document.getElementById('scoreResult').textContent = `Score: ${score}/${questions.length} (${scorePercentage.toFixed(0)}%)`;
+            
+            // Determine level
+            let level = '';
+            if (scorePercentage >= 90) {
+                level = 'Expert';
+                document.getElementById('levelResult').className = 'level-badge level-expert';
+            } else if (scorePercentage >= 80) {
+                level = 'Senior';
+                document.getElementById('levelResult').className = 'level-badge level-senior';
+            } else if (scorePercentage >= 70) {
+                level = 'Intermédiaire+';
+                document.getElementById('levelResult').className = 'level-badge level-intermediate-plus';
+            } else if (scorePercentage >= 60) {
+                level = 'Intermédiaire';
+                document.getElementById('levelResult').className = 'level-badge level-intermediate';
+            } else {
+                level = 'Junior';
+                document.getElementById('levelResult').className = 'level-badge level-junior';
+            }
+            document.getElementById('levelResult').textContent = `Niveau: ${level}`;
+            
+            // Stats
+            const correctAnswers = answers.filter(a => a.isCorrect).length;
+            const incorrectAnswers = answers.length - correctAnswers;
+            document.getElementById('correctAnswers').textContent = `Bonnes réponses: ${correctAnswers}`;
+            document.getElementById('incorrectAnswers').textContent = `Erreurs: ${incorrectAnswers}`;
+            
+            // Generate review
+            const reviewContainer = document.getElementById('reviewContainer');
+            reviewContainer.innerHTML = '';
+            
+            answers.forEach((answer, index) => {
+                const reviewItem = document.createElement('div');
+                reviewItem.className = `review-item ${answer.isCorrect ? 'correct' : 'incorrect'}`;
+                
+                const reviewHeader = document.createElement('div');
+                reviewHeader.className = 'review-header';
+                
+                const questionNumber = document.createElement('span');
+                questionNumber.textContent = `Question ${index + 1}`;
+                reviewHeader.appendChild(questionNumber);
+                
+                const reviewStatus = document.createElement('span');
+                if (answer.isCorrect) {
+                    reviewStatus.innerHTML = `<svg class="icon-small icon-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m9 12 2 2 4-4"></path>
+                        <circle cx="12" cy="12" r="10"></circle>
+                    </svg>`;
+                } else {
+                    reviewStatus.innerHTML = `<svg class="icon-small icon-red" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="m15 9-6 6"></path>
+                        <path d="m9 9 6 6"></path>
+                    </svg>`;
+                }
+                reviewHeader.appendChild(reviewStatus);
+                reviewItem.appendChild(reviewHeader);
+                
+                const reviewQuestion = document.createElement('div');
+                reviewQuestion.className = 'review-question';
+                reviewQuestion.textContent = answer.question;
+                reviewItem.appendChild(reviewQuestion);
+                
+                if (answer.selectedAnswer !== -1) {
+                    const userAnswer = document.createElement('div');
+                    userAnswer.className = 'review-text review-user-answer';
+                    userAnswer.textContent = `Votre réponse: ${questions.find(q => q.id === answer.questionId).options[answer.selectedAnswer]}`;
+                    reviewItem.appendChild(userAnswer);
+                } else {
+                    const userAnswer = document.createElement('div');
+                    userAnswer.className = 'review-text review-user-answer';
+                    userAnswer.textContent = `Votre réponse: Aucune réponse (temps écoulé)`;
+                    reviewItem.appendChild(userAnswer);
+                }
+                
+                const correctAnswer = document.createElement('div');
+                correctAnswer.className = 'review-text review-correct-answer';
+                correctAnswer.textContent = `Réponse correcte: ${questions.find(q => q.id === answer.questionId).options[answer.correctAnswer]}`;
+                reviewItem.appendChild(correctAnswer);
+                
+                const explanation = document.createElement('div');
+                explanation.className = 'review-text review-explanation';
+                explanation.textContent = `Explication: ${answer.explanation}`;
+                reviewItem.appendChild(explanation);
+                
+                reviewContainer.appendChild(reviewItem);
+            });
+        }
+
+        function resetQuiz() {
+            currentQuestion = 0;
+            selectedAnswer = -1;
+            score = 0;
+            answers = [];
+            quizStarted = false;
+            quizCompleted = false;
+            clearInterval(timer);
+            
+            document.getElementById('resultsScreen').classList.add('hidden');
+            document.getElementById('startScreen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
